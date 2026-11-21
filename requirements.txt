@@ -1,0 +1,4 @@
+bleak==3.1.0
+cryptography==50.0.2
+protobuf==7.36.2
+grpcio-tools==1.85.3  # só para recompilar os .proto

@@ -1,0 +1,26 @@
+# --- Segredos ---
+# auth key e MAC do relógio
+.env
+.env.*
+
+# --- Dados pessoais de saúde ---
+# arquivos brutos do relógio, logs do Mi Fitness, banco SQLite, referências baixadas
+.dados/
+*.db
+*.sqlite
+*.bin
+# exports que você fizer (CSV, planilhas, export oficial da Xiaomi)
+exports/
+*.csv
+*.xlsx
+*.zip
+
+# --- Orquestrador ---
+# respostas dos modelos e cópias de código usadas como contexto
+.orquestrador/resultados/
+.orquestrador/ctx/
+
+# --- Python ---
+.venv/
+__pycache__/
+*.pyc
