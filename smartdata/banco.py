@@ -40,6 +40,10 @@ CREATE TABLE IF NOT EXISTS respiracao (ts_ms INTEGER PRIMARY KEY, rpm INTEGER);
 CREATE TABLE IF NOT EXISTS treinos (inicio INTEGER PRIMARY KEY, fim INTEGER, subtipo TEXT,
     segundos_ativos INTEGER, calorias INTEGER, fc_media INTEGER, fc_max INTEGER, fc_min INTEGER, json TEXT);
 CREATE TABLE IF NOT EXISTS treino_segundos (ts INTEGER PRIMARY KEY, fc INTEGER, calorias INTEGER);
+CREATE TABLE IF NOT EXISTS app_sono (inicio INTEGER PRIMARY KEY, fim INTEGER, profundo_min INTEGER,
+    leve_min INTEGER, rem_min INTEGER, acordado_min INTEGER, despertares INTEGER);
+CREATE TABLE IF NOT EXISTS app_estagios (inicio INTEGER PRIMARY KEY, fim INTEGER, estagio TEXT,
+    noite INTEGER);
 """
 
 COLUNAS_RESUMO = ["passos", "calorias_ativas", "calorias", "fc_repouso", "fc_min", "fc_max", "fc_media",
@@ -93,6 +97,23 @@ def _carregar(con: sqlite3.Connection, i: IdArquivo, d: bytes) -> str:
     if sub == "ACTIVITY_MANUAL_SAMPLES" and len(d) <= 13:
         return "vazio"
     return "sem decodificador"
+
+
+def carregar_app_sono() -> int:
+    """Estágios de sono calculados pelo Mi Fitness (extraídos dos logs do app)."""
+    from smartdata.mifitness import extrair
+    noites = extrair()
+    con = conectar()
+    with con:
+        for n in noites:
+            con.execute("INSERT OR REPLACE INTO app_sono VALUES (?,?,?,?,?,?,?)",
+                        (n["inicio"], n["fim"], n["profundo_min"], n["leve_min"], n["rem_min"],
+                         n["acordado_min"], n["despertares"]))
+            con.execute("DELETE FROM app_estagios WHERE noite = ?", (n["inicio"],))
+            con.executemany("INSERT OR REPLACE INTO app_estagios VALUES (?,?,?,?)",
+                            [(e["inicio"], e["fim"], e["estagio"], n["inicio"]) for e in n["estagios"]])
+    con.close()
+    return len(noites)
 
 
 def carregar_tudo() -> list[tuple[str, str]]:

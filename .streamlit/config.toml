@@ -1,0 +1,8 @@
+[browser]
+# não envia estatísticas de uso para a Streamlit
+gatherUsageStats = false
+
+[server]
+headless = true
+port = 8501
+address = "localhost"
