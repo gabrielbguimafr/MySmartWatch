@@ -1,26 +1,52 @@
-# --- Segredos ---
-# auth key e MAC do relógio
+# =====================================================================
+# Regra do projeto: NENHUM dado pessoal vai para o git.
+# O repositório guarda só código, esquemas e testes. Dados de saúde,
+# chaves, perfil, logs e documentos gerados ficam apenas no PC.
+# =====================================================================
+
+# --- Segredos e perfil (auth key, MAC, peso, altura, nascimento) ---
 .env
 .env.*
+.streamlit/secrets.toml
+.claude/settings.local.json
 
-# --- Dados pessoais de saúde ---
-# arquivos brutos do relógio, logs do Mi Fitness, banco SQLite, referências baixadas
+# --- Dados do relógio e do app ---
+# brutos do relógio, logs do Mi Fitness, banco SQLite, referências baixadas
 .dados/
+# qualquer arquivo de dados, onde quer que apareça
 *.db
+*.db-journal
 *.sqlite
+*.sqlite3
 *.bin
-# exports que você fizer (CSV, planilhas, export oficial da Xiaomi)
-exports/
 *.csv
+*.tsv
 *.xlsx
+*.xls
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.log
+*.log.*
 *.zip
+*.apkg
+
+# --- Documentos e exports gerados (contêm números pessoais) ---
+docs/
+exports/
+*.pdf
+*.docx
 
 # --- Orquestrador ---
 # respostas dos modelos e cópias de código usadas como contexto
 .orquestrador/resultados/
 .orquestrador/ctx/
 
-# --- Python ---
+# --- Python / ferramentas ---
 .venv/
 __pycache__/
 *.pyc
+.pytest_cache/
