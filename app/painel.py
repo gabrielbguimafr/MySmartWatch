@@ -195,7 +195,7 @@ def sombrear_estagios(fig: go.Figure, nome_noite: str, col: int | None = None) -
     for e in n.estagios_app.itertuples():
         x0, x1 = eixo(pd.DatetimeIndex([e.inicio, e.fim]), n.deitou)
         kw = dict(row="all", col=col) if col else {}
-        fig.add_vrect(x0=x0, x1=x1, fillcolor=COR_ESTAGIO.get(e.estagio, "gray"), opacity=0.18,
+        fig.add_vrect(x0=x0, x1=x1, fillcolor=COR_ESTAGIO.get(e.estagio, "gray"), opacity=0.28,
                       line_width=0, layer="below", **kw)
 
 
